@@ -18,7 +18,8 @@ public class    ShortenerInteractor implements ShortenerUseCase {
         return urlGateway.getById(id);
     }
 
-    public void create(String url, String id) {
-        urlGateway.create(url, id);
+    public ShortenedURL create(String url) {
+
+         return urlGateway.create(url);
     }
 }

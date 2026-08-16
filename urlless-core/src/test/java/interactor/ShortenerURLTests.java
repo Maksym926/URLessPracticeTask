@@ -32,11 +32,13 @@ public class ShortenerURLTests {
     @Test
     public void shouldReturnResultOnExistingURL(){
 
-        sut.create("http:/test", "12345Vq");
+        urlGateway.create("http:/test", "12345Vq");
         ShortenedURL result = sut.getById("12345Vq").get();
         assertEquals("12345Vq", result.getId());
         assertEquals("http:/test", result.getUrl());
 
     }
+
+
 
 }

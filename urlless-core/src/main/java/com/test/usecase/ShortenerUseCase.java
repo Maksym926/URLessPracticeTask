@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface ShortenerUseCase {
     Optional<ShortenedURL> getById(String id);
-    void create(String url, String id);
+    ShortenedURL create(String url);
 }
