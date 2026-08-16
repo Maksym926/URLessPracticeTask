@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -24,6 +25,12 @@ public class ShortenerControllerTests {
                 .andExpect(MockMvcResultMatchers
                         .content()
                         .string("url does not exists"));
+    }
+    @Test
+    public void shouldReturn301OnRedirect() throws Exception{
+        mockMvc.perform(get("/abcTest"))
+                .andExpect(status().isMovedPermanently())
+                .andExpect(header().string("Location", "http://test"));
     }
 
 }
