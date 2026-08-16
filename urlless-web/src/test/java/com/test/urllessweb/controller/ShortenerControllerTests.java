@@ -1,5 +1,7 @@
 package com.test.urllessweb.controller;
 
+import com.test.gateway.UrlGateway;
+import com.test.gateway.UrlGatewayFake;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +20,9 @@ public class ShortenerControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private UrlGateway urlGateway ;
+
     @Test
     public void shouldReturn404OnNonExistingURLTest() throws Exception {
         mockMvc.perform(get("/NON-EXISTING-URL"))
@@ -28,9 +33,13 @@ public class ShortenerControllerTests {
     }
     @Test
     public void shouldReturn301OnRedirect() throws Exception{
+        urlGateway.create("http://test", "/abcTest");
         mockMvc.perform(get("/abcTest"))
                 .andExpect(status().isMovedPermanently())
                 .andExpect(header().string("Location", "http://test"));
     }
+
+
+
 
 }

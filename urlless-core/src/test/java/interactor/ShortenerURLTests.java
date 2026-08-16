@@ -1,9 +1,9 @@
 package interactor;
 
-import com.test.ShortenedURL;
-import com.test.ShortenerInteractor;
-import com.test.UrlGateway;
-import com.test.UrlGatewayFake;
+import com.test.shortener.ShortenedURL;
+import com.test.interactor.ShortenerInteractor;
+import com.test.gateway.UrlGateway;
+import com.test.gateway.UrlGatewayFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ShortenerURLTests {
 
     private ShortenerInteractor sut;
+    private UrlGateway urlGateway;
 
     @BeforeEach
     void setUp() {
-        UrlGateway urlGateway = new UrlGatewayFake();
+        urlGateway = new UrlGatewayFake();
         sut = new ShortenerInteractor(urlGateway);
     }
 

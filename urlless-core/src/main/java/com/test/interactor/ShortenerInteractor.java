@@ -1,10 +1,14 @@
-package com.test;
+package com.test.interactor;
+
+import com.test.shortener.ShortenedURL;
+import com.test.gateway.UrlGateway;
+import com.test.usecase.ShortenerUseCase;
 
 import java.util.Optional;
 
-public class    ShortenerInteractor {
+public class    ShortenerInteractor implements ShortenerUseCase {
 
-    private UrlGateway urlGateway;
+    private final UrlGateway urlGateway;
 
     public ShortenerInteractor(UrlGateway urlGateway) {
         this.urlGateway = urlGateway;

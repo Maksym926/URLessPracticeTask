@@ -1,4 +1,6 @@
-package com.test;
+package com.test.gateway;
+
+import com.test.shortener.ShortenedURL;
 
 import java.util.HashMap;
 import java.util.Map;
