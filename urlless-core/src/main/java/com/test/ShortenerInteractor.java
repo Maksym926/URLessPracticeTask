@@ -3,7 +3,18 @@ package com.test;
 import java.util.Optional;
 
 public class    ShortenerInteractor {
-    public Optional<ShortenedURL> getById(String s) {
-        return Optional.empty();
+
+    private UrlGateway urlGateway;
+
+    public ShortenerInteractor(UrlGateway urlGateway) {
+        this.urlGateway = urlGateway;
+    }
+
+    public Optional<ShortenedURL> getById(String id) {
+        return urlGateway.getById(id);
+    }
+
+    public void create(String url, String id) {
+        urlGateway.create(url, id);
     }
 }
