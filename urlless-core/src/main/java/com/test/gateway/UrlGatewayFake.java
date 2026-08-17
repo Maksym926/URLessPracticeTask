@@ -1,5 +1,6 @@
 package com.test.gateway;
 
+import com.test.exception.UrlAlreadyExistsException;
 import com.test.shortener.ShortenedURL;
 
 import java.util.HashMap;
@@ -18,6 +19,9 @@ public class UrlGatewayFake implements UrlGateway {
 
     @Override
     public ShortenedURL create(String url, String id) {
+        if(urls.containsKey(id)){
+            throw new UrlAlreadyExistsException(id);
+        }
         ShortenedURL res = new ShortenedURL(url, id);
         urls.put(id, res);
         return res;

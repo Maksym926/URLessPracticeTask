@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ShortenerURLTests {
 
@@ -32,6 +32,7 @@ public class ShortenerURLTests {
     public void shouldReturnEmptyOnNonExistingUrl(){
 
         Optional<ShortenedURL> result = sut.getById("Non-Existing-Url");
+
         assertEquals(Optional.empty(), result);
 
     }
@@ -40,6 +41,7 @@ public class ShortenerURLTests {
 
         urlGateway.create("http:/test", "12345Vq");
         ShortenedURL result = sut.getById("12345Vq").get();
+
         assertEquals("12345Vq", result.getId());
         assertEquals("http:/test", result.getUrl());
 
@@ -48,7 +50,21 @@ public class ShortenerURLTests {
     public void shouldReturnCreateUrl(){
         generator.add("abcd");
         ShortenedURL result = sut.create("http://test");
+
         assertEquals("abcd", result.getId());
+
+    }
+    @Test
+    public void shouldCreateDifferentShortenedUrls(){
+        generator.add("abcd", "abcd", "abcd", "efgm");
+        ShortenedURL res1 = sut.create("http://test");
+        ShortenedURL res2 = sut.create("http://test");
+
+        assertNotEquals(res1.getId(), res2.getId());
+        assertEquals("efgm", res2.getId());
+        assertEquals(1,generator.getCollisions().size());
+        assertTrue(generator.getCollisions().contains("abcd"));
+
 
     }
 

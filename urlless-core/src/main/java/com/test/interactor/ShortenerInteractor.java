@@ -1,11 +1,15 @@
 package com.test.interactor;
 
+import com.test.exception.FailedToCreateUrlException;
+import com.test.exception.UrlAlreadyExistsException;
 import com.test.generator.IdGenerator;
 import com.test.shortener.ShortenedURL;
 import com.test.gateway.UrlGateway;
 import com.test.usecase.ShortenerUseCase;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class    ShortenerInteractor implements ShortenerUseCase {
 
@@ -22,7 +26,19 @@ public class    ShortenerInteractor implements ShortenerUseCase {
     }
 
     public ShortenedURL create(String url) {
-        String id = generator.generate();
-        return urlGateway.create(url, id);
+        boolean collision = false;
+
+        Set<String> collisions = new HashSet<>();
+        do{
+            try{
+                String id = generator.generate(url, collisions);
+                return urlGateway.create(url, id);
+            }catch (UrlAlreadyExistsException e){
+                collision = true;
+                collisions.add(e.getId());
+            }
+        }while (collision);
+
+        throw new FailedToCreateUrlException();
     }
 }
