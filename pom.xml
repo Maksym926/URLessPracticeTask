@@ -10,7 +10,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>urless-web</module>
+        <module>urlless-web</module>
+        <module>urlless-core</module>
     </modules>
 
     <properties>

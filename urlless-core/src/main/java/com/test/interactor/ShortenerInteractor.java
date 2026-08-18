@@ -1,7 +1,7 @@
 package com.test.interactor;
 
-import com.test.exception.FailedToCreateUrlException;
-import com.test.exception.UrlAlreadyExistsException;
+import com.test.exceptions.FailedToCreateUrlException;
+import com.test.exceptions.UrlAlreadyExistsException;
 import com.test.generator.IdGenerator;
 import com.test.shortener.ShortenedURL;
 import com.test.gateway.UrlGateway;

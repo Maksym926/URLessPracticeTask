@@ -1,6 +1,6 @@
 package com.test.gateway;
 
-import com.test.exception.UrlAlreadyExistsException;
+import com.test.exceptions.UrlAlreadyExistsException;
 import com.test.shortener.ShortenedURL;
 
 import java.util.HashMap;
