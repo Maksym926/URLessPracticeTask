@@ -1,4 +1,4 @@
-package com.test.urllessweb.controller;
+package com.test.urllessweb.controllers;
 
 import com.test.shortener.ShortenedURL;
 import com.test.urllessweb.dto.CreateUrlRequest;

@@ -1,7 +1,6 @@
-package com.test.urllessweb.controller;
+package com.test.urllessweb.controllers;
 
 import com.test.gateway.UrlGateway;
-import com.test.gateway.UrlGatewayFake;
 import com.test.shortener.ShortenedURL;
 import com.test.urllessweb.dto.CreateUrlRequest;
 import com.test.urllessweb.dto.CreateUrlResponse;
@@ -41,11 +40,12 @@ public class ShortenerControllerTests {
     }
     @Test
     public void shouldReturn301OnRedirect() throws Exception{
-        urlGateway.create("http://test", "/abcTest");
+        urlGateway.create("http://test", "abcTest");
         mockMvc.perform(get("/abcTest"))
                 .andExpect(status().isMovedPermanently())
                 .andExpect(header().string("Location", "http://test"));
     }
+    @Test
     public void shouldReturn201OnCreatingURL() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         CreateUrlRequest request = new CreateUrlRequest("http://test");
@@ -58,7 +58,7 @@ public class ShortenerControllerTests {
         ShortenedURL expected = urlGateway.getAll().get(0);
 
         assertEquals(expected.getUrl() , response.getOriginalUrl());
-        assertEquals("http://urle.ss" + expected.getId(), response.getUrl());
+        assertEquals("http://urle.ss/" + expected.getId(), response.getUrl());
 
     }
 

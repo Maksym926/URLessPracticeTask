@@ -1,8 +1,11 @@
-package com.test.urllessweb.controller;
+package com.test.urllessweb.config;
 
+import com.test.gateway.CollectionGateway;
+import com.test.gateway.CollectionGatewayFake;
 import com.test.gateway.UrlGateway;
 import com.test.gateway.UrlGatewayFake;
 import com.test.generator.IdGenerator;
+import com.test.generator.SHA1Generator;
 import com.test.interactor.ShortenerInteractor;
 import com.test.usecase.ShortenerUseCase;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +23,11 @@ public class ShortenerConfig {
     }
     @Bean
     public IdGenerator idGeneratorFake(){
-        return null;
+        return  new SHA1Generator();
+    }
+
+    @Bean
+    public CollectionGateway collectionGatewayFake(){
+        return new CollectionGatewayFake();
     }
 }
