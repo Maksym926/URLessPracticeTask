@@ -3,6 +3,8 @@ package com.test.urllessweb.controllers;
 import com.test.collection.UrlCollection;
 import com.test.gateway.CollectionGateway;
 import com.test.shortener.ShortenedURL;
+import com.test.urllessweb.dto.CollectionRequest;
+import com.test.urllessweb.dto.CollectionResponse;
 import com.test.usecase.ShortenerUseCase;
 
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,9 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 //import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -66,6 +70,27 @@ public class CollectionControllerTests {
             assertEquals(shortenedURLS.get(i).getId(), collection.get(i).getId());
         }
     }
+    @Test
+    public void shouldReturn201OnCreatingCollection() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<ShortenedURL> shortenedURLS =
+                createShortenedUrlListHelper(List.of("http://test1"));
+        shortenedURLS.add(ShortenedURL.builder()
+                .url("http://test3").build());
+        CollectionRequest request = new CollectionRequest(shortenedURLS);
+        String json = objectMapper.writeValueAsString(request);
+
+        MvcResult result = mockMvc.perform(post("/collection").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated())
+                .andReturn();
+        CollectionResponse response = objectMapper.readValue(result.getResponse().getContentAsString(), CollectionResponse.class);
+
+        assertEquals(shortenedURLS.get(0).getUrl(), response.getShortenedURLS().get(0).getUrl());
+        assertNotEquals(shortenedURLS.get(1).getUrl(), response.getShortenedURLS().get(1).getUrl());
+
+
+    }
+
 
     private List<ShortenedURL> createShortenedUrlListHelper(List<String> urls) {
         return new ArrayList<>(urls.stream().map(shortenerInteractor::create).toList());

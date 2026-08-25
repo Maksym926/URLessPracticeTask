@@ -7,6 +7,7 @@ import lombok.*;
 @RequiredArgsConstructor
 
 @AllArgsConstructor
+@Builder
 public class ShortenedURL {
     private String url;
 
