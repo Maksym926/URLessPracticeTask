@@ -3,17 +3,13 @@ package com.test.interactor;
 import com.test.collection.UrlCollection;
 import com.test.exceptions.CollectionAlreadyExistsException;
 import com.test.exceptions.FailedToCreateUrlException;
-import com.test.exceptions.UrlAlreadyExistsException;
 import com.test.gateway.CollectionGateway;
 import com.test.generator.IdGenerator;
 import com.test.shortener.ShortenedURL;
 import com.test.usecase.CollectionUseCase;
 import com.test.usecase.ShortenerUseCase;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class CollectionInteractor implements CollectionUseCase {
 
@@ -36,7 +32,10 @@ public class CollectionInteractor implements CollectionUseCase {
     }
 
     @Override
-    public UrlCollection create(List<ShortenedURL> shortenedUrls) {
+    public UrlCollection create(List<ShortenedURL> urls) {
+
+        List<ShortenedURL> shortenedUrls = shortenUrlsInCollections(urls);
+
         boolean collision = false;
 
         Set<String> collisions = new HashSet<>();
@@ -52,5 +51,17 @@ public class CollectionInteractor implements CollectionUseCase {
 
         throw new FailedToCreateUrlException();
 
+    }
+
+    private List<ShortenedURL> shortenUrlsInCollections(List<ShortenedURL> urls) {
+        List<ShortenedURL> shortened = new ArrayList<>();
+        for (ShortenedURL u : urls){
+            if(u.getId() == null || Objects.equals(shortenerInteractor.getById(u.getId()), Optional.empty())){
+                shortened.add(shortenerInteractor.create(u.getUrl()));
+            }else{
+                shortened.add(u);
+            }
+        }
+        return shortened;
     }
 }

@@ -6,11 +6,9 @@ import com.test.gateway.CollectionGateway;
 import com.test.gateway.CollectionGatewayFake;
 import com.test.gateway.UrlGateway;
 import com.test.gateway.UrlGatewayFake;
-import com.test.generator.IdGenerator;
 import com.test.interactor.CollectionInteractor;
 import com.test.interactor.ShortenerInteractor;
 import com.test.shortener.ShortenedURL;
-import com.test.usecase.ShortenerUseCase;
 import fake.IdGeneratorFake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CollectionInteractorTest {
 
@@ -28,6 +26,7 @@ public class CollectionInteractorTest {
 
     private IdGeneratorFake generatorForCollection;
     private ShortenerInteractor shortenerInteractor;
+    private UrlGateway urlGateway;
 
     @BeforeEach
     void setUp() {
@@ -39,10 +38,10 @@ public class CollectionInteractorTest {
 
     private ShortenerInteractor shortenerInteractorSetUp() {
         IdGeneratorFake generator = new IdGeneratorFake();
-        UrlGateway gateway = new UrlGatewayFake();
+        urlGateway = new UrlGatewayFake();
         generator.add("abcd", "efgV21", "mknl");
 
-        return  new ShortenerInteractor(gateway, generator);
+        return  new ShortenerInteractor(urlGateway, generator);
 
     }
 
@@ -80,6 +79,19 @@ public class CollectionInteractorTest {
 
         assertEquals("abcde", collection1.getId());
         assertEquals("efgmln", collection2.getId());
+    }
+    @Test
+    public void shouldCreateCollectionWithShortenedUrls(){
+        generatorForCollection.add("abcde");
+        List<ShortenedURL> shortenedURLS = createShortenedUrlListHelper(List.of("http/test1", "http/test4"));
+        shortenedURLS.add(ShortenedURL.builder().url("http/test3").build());
+
+        UrlCollection collection = sut.create(shortenedURLS);
+
+        for(ShortenedURL shortenedUrl : collection.getShortenedURLS()){
+            assertNotEquals(Optional.empty(), urlGateway.getById(shortenedUrl.getId()));
+        }
+
     }
 
 
