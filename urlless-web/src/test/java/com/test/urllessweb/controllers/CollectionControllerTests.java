@@ -2,6 +2,7 @@ package com.test.urllessweb.controllers;
 
 import com.test.collection.UrlCollection;
 import com.test.gateway.CollectionGateway;
+import com.test.gateway.UrlGateway;
 import com.test.shortener.ShortenedURL;
 import com.test.urllessweb.dto.CollectionRequest;
 import com.test.urllessweb.dto.CollectionResponse;
@@ -20,10 +21,11 @@ import tools.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.MediaType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 //import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,6 +43,9 @@ public class CollectionControllerTests {
 
     @Autowired
     private CollectionGateway collectionGateway;
+
+    @Autowired
+    private UrlGateway urlGateway;
 
     @Test
     public void shouldReturn404OnNonExistingCollection() throws Exception {
@@ -86,9 +91,10 @@ public class CollectionControllerTests {
         CollectionResponse response = objectMapper.readValue(result.getResponse().getContentAsString(), CollectionResponse.class);
         UrlCollection expected = collectionGateway.getAll().get(0);
 
+        assertTrue(expected.getId().matches("[A-Za-z0-9]{5}"));
 
         assertEquals(expected.getShortenedURLS().get(0).getUrl(), response.getShortenedURLS().get(0).getUrl());
-        assertNotEquals(expected.getShortenedURLS().get(1).getUrl(), response.getShortenedURLS().get(1).getUrl());
+        assertNotEquals(Optional.empty(), urlGateway.getById(response.getShortenedURLS().get(1).getId()));
 
 
     }

@@ -9,6 +9,7 @@ import com.test.shortener.ShortenedURL;
 import com.test.usecase.CollectionUseCase;
 import com.test.usecase.ShortenerUseCase;
 
+
 import java.util.*;
 
 public class CollectionInteractor implements CollectionUseCase {
@@ -19,7 +20,7 @@ public class CollectionInteractor implements CollectionUseCase {
 
     private final IdGenerator idGenerator;
 
-    public CollectionInteractor(CollectionGateway collectionGateway, ShortenerInteractor shortenerInteractor, IdGenerator idGenerator) {
+    public CollectionInteractor(CollectionGateway collectionGateway, ShortenerUseCase shortenerInteractor, IdGenerator idGenerator) {
         this.collectionGateway = collectionGateway;
         this.shortenerInteractor = shortenerInteractor;
         this.idGenerator = idGenerator;
