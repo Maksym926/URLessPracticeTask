@@ -84,9 +84,11 @@ public class CollectionControllerTests {
                 .andExpect(status().isCreated())
                 .andReturn();
         CollectionResponse response = objectMapper.readValue(result.getResponse().getContentAsString(), CollectionResponse.class);
+        UrlCollection expected = collectionGateway.getAll().get(0);
 
-        assertEquals(shortenedURLS.get(0).getUrl(), response.getShortenedURLS().get(0).getUrl());
-        assertNotEquals(shortenedURLS.get(1).getUrl(), response.getShortenedURLS().get(1).getUrl());
+
+        assertEquals(expected.getShortenedURLS().get(0).getUrl(), response.getShortenedURLS().get(0).getUrl());
+        assertNotEquals(expected.getShortenedURLS().get(1).getUrl(), response.getShortenedURLS().get(1).getUrl());
 
 
     }

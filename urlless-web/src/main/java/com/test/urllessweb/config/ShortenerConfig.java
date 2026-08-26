@@ -37,7 +37,7 @@ public class ShortenerConfig {
 
     @Bean
     public CollectionUseCase collectionInteractor(CollectionGateway collectionGateway){
-        return new CollectionInteractor(collectionGateway);
+        return new CollectionInteractor(collectionGateway, shortenerInteractor, generatorForCollection);
     }
 
     @Bean

@@ -1,13 +1,15 @@
 package com.test.urllessweb.controllers;
 
+import com.test.collection.UrlCollection;
+import com.test.urllessweb.dto.CollectionRequest;
+import com.test.urllessweb.dto.CollectionResponse;
 import com.test.usecase.CollectionUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/collection")
@@ -26,5 +28,11 @@ public class CollectionController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
 
+    }
+    @PostMapping
+    public ResponseEntity postCollection(@RequestBody CollectionRequest request){
+        UrlCollection collection = collectionUseCase.create(request.getShortenedUrls());
+        String location = "/api/collections/" + collection.getId();
+        return ResponseEntity.created(URI.create(location)).body(new CollectionResponse(request.getShortenedUrls(), collection.getShortenedURLS()));
     }
 }

@@ -10,4 +10,6 @@ public interface CollectionGateway {
     UrlCollection create(String id, List<ShortenedURL> shortenedURLS);
 
     Optional<UrlCollection> getById(String id);
+
+    List<UrlCollection> getAll();
 }

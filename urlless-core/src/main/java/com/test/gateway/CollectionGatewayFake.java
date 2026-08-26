@@ -1,6 +1,7 @@
 package com.test.gateway;
 
 import com.test.collection.UrlCollection;
+import com.test.exceptions.CollectionAlreadyExistsException;
 import com.test.shortener.ShortenedURL;
 
 import java.util.HashMap;
@@ -14,6 +15,8 @@ public class CollectionGatewayFake  implements CollectionGateway{
 
     @Override
     public UrlCollection create(String id, List<ShortenedURL> shortenedURLS) {
+        if(collections.containsKey(id))
+            throw new CollectionAlreadyExistsException(id);
         UrlCollection collection = new UrlCollection(id, shortenedURLS);
         collections.put(id, collection);
         return collection;
@@ -22,5 +25,10 @@ public class CollectionGatewayFake  implements CollectionGateway{
     @Override
     public Optional<UrlCollection> getById(String id) {
         return Optional.ofNullable(collections.get(id));
+    }
+
+    @Override
+    public List<UrlCollection> getAll() {
+        return collections.values().stream().toList();
     }
 }
