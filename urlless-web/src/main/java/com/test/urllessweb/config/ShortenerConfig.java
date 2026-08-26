@@ -6,10 +6,12 @@ import com.test.gateway.UrlGateway;
 import com.test.gateway.UrlGatewayFake;
 import com.test.generator.IdGenerator;
 import com.test.generator.SHA1Generator;
+import com.test.generator.StringIdGenerator;
 import com.test.interactor.CollectionInteractor;
 import com.test.interactor.ShortenerInteractor;
 import com.test.usecase.CollectionUseCase;
 import com.test.usecase.ShortenerUseCase;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,7 +22,7 @@ public class ShortenerConfig {
     //Url
 
     @Bean
-    public ShortenerUseCase shortener(UrlGateway urlGateway, IdGenerator generator){
+    public ShortenerUseCase shortener(UrlGateway urlGateway, @Qualifier("urlIdGenerator")IdGenerator generator){
         return new ShortenerInteractor(urlGateway, generator);
     }
 
@@ -29,20 +31,25 @@ public class ShortenerConfig {
         return new UrlGatewayFake();
     }
     @Bean
-    public IdGenerator idGeneratorFake(){
+    public IdGenerator urlIdGenerator(){
         return  new SHA1Generator();
     }
 
     //Collection
 
     @Bean
-    public CollectionUseCase collectionInteractor(CollectionGateway collectionGateway, ShortenerUseCase shortenerInteractor, IdGenerator generatorForCollection){
+    public CollectionUseCase collectionInteractor(CollectionGateway collectionGateway, ShortenerUseCase shortenerInteractor, @Qualifier("collectionIdGenerator") IdGenerator generatorForCollection){
         return new CollectionInteractor(collectionGateway, shortenerInteractor, generatorForCollection);
     }
 
     @Bean
     public CollectionGateway collectionGatewayFake(){
         return new CollectionGatewayFake();
+    }
+
+    @Bean
+    public IdGenerator collectionIdGenerator(){
+        return  new StringIdGenerator();
     }
 
 
