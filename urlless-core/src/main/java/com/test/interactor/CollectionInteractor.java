@@ -55,14 +55,12 @@ public class CollectionInteractor implements CollectionUseCase {
     }
 
     private List<ShortenedURL> shortenUrlsInCollections(List<ShortenedURL> urls) {
-        List<ShortenedURL> shortened = new ArrayList<>();
-        for (ShortenedURL u : urls){
-            if(u.getId() == null || Objects.equals(shortenerInteractor.getById(u.getId()), Optional.empty())){
-                shortened.add(shortenerInteractor.create(u.getUrl()));
-            }else{
-                shortened.add(u);
-            }
-        }
-        return shortened;
+
+        return urls.stream()
+                .map(u -> isUrlShortened(u) ? u : shortenerInteractor.create(u.getUrl()))
+                .toList();
+    }
+    private boolean isUrlShortened(ShortenedURL url){
+        return url.getId() != null && shortenerInteractor.getById(url.getId()).isPresent();
     }
 }
